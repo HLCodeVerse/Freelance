@@ -1,1103 +1,884 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oxford Marketing - Premium Air Coolers for Indian Summers</title>
+    <title>Chandan Charchita Panda - Java Developer</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/gsap@3.12.2/dist/gsap.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-okaidia.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#6366f1',
+                        'secondary': '#818cf8',
+                        'accent': '#a5b4fc',
+                        'dark-bg': '#0f172a',
+                        'card-bg': '#1e293b'
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'slideInUp': 'slideInUp 0.8s ease-out'
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap');
-        
-        :root {
-            --primary: #0066cc;
-            --secondary: #00aaff;
-            --accent: #00ccff;
-            --dark: #003366;
-            --light: #f0f9ff;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        
+
         body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: #f8fafc;
-            color: #333;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f8fafc;
+            font-family: 'Inter', system-ui, sans-serif;
         }
-        
-        .frost-effect {
-            position: relative;
-            overflow: hidden;
+
+        .glass-effect {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(20px);
         }
-        
-        .frost-effect::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(
-                135deg, 
-                rgba(0, 170, 255, 0.05) 0%, 
-                rgba(255, 255, 255, 0.3) 50%, 
-                rgba(0, 204, 255, 0.05) 100%
-            );
-            animation: frost 10s infinite linear;
-            z-index: 0;
+
+        .card {
+            transition: all 0.3s ease;
         }
-        
-        @keyframes frost {
-            0% { transform: translateX(-100%) translateY(-50%); }
-            100% { transform: translateX(100%) translateY(50%); }
+
+        .card:hover {
+            box-shadow: 0 10px 20px rgba(220, 38, 38, 0.2);
         }
-        
-        .cooler-card {
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+
+        .text-gradient {
+            background: linear-gradient(135deg, #ffffff 0%, #dc2626 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        
-        .cooler-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 10px 25px rgba(0, 102, 204, 0.15);
+
+        .purple-gradient {
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
         }
-        
-        .product-modal {
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 20px rgba(220, 38, 38, 0.3);
+            }
+
+            to {
+                box-shadow: 0 0 30px rgba(220, 38, 38, 0.6);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInScale {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .scroll-indicator {
             position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: white;
-            z-index: 100;
-            overflow-y: auto;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-        
-        .product-modal.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-        
-        .blur-load {
-            background-size: cover;
-            background-position: center;
-        }
-        
-        .blur-load.loaded > img {
-            opacity: 1;
-        }
-        
-        .blur-load > img {
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        .cool-wave {
-            position: absolute;
-            bottom: 0;
-            left: 0;
             width: 100%;
-            height: 100px;
-            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" fill="%230066cc" opacity=".1"/><path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" fill="%230066cc" opacity=".3"/><path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" fill="%230066cc"/></svg>');
-            background-size: cover;
-            background-repeat: no-repeat;
+            height: 4px;
+            background: rgba(220, 38, 38, 0.3);
+            z-index: 1000;
         }
-        
-        .temperature-display {
-            background: linear-gradient(135deg, #0066cc 0%, #00aaff 100%);
-            border-radius: 50%;
-            width: 80px;
-            height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(0, 102, 204, 0.3);
-        }
-        
-        .feature-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, rgba(0, 170, 255, 0.1) 0%, rgba(0, 204, 255, 0.2) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
-            font-size: 24px;
-        }
-        
-        .review-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease;
-        }
-        
-        .review-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .tab-button {
-            position: relative;
-            padding-bottom: 8px;
-        }
-        
-        .tab-button::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 3px;
-            background: var(--primary);
+
+        .scroll-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #dc2626, #ef4444);
+            width: 0%;
             transition: width 0.3s ease;
         }
-        
-        .tab-button.active::after {
-            width: 100%;
+
+        .navbar {
+            backdrop-filter: blur(20px);
+            background: rgba(10, 10, 10, 0.9);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .skill-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #dc2626, #ef4444);
+            border-radius: 4px;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 1.5s ease-out;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+            border-left: 2px solid rgba(220, 38, 38, 0.3);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            background: #dc2626;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(220, 38, 38, 0.5);
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            background: rgba(26, 26, 26, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            border-color: #dc2626;
+            box-shadow: 0 0 10px rgba(220, 38, 38, 0.3);
+            outline: none;
         }
     </style>
 </head>
-<body class="antialiased">
-    <!-- Header -->
-    <header class="frost-effect bg-gradient-to-r from-blue-900 to-blue-700 text-white py-5 shadow-md sticky top-0 z-50">
-        <div class="container mx-auto px-4 flex justify-between items-center relative z-10">
-            <div class="flex items-center space-x-3">
-                <div class="bg-white p-2 rounded-full">
-                    <i class="fas fa-snowflake text-blue-600 text-xl"></i>
-                </div>
-                <h1 class="text-2xl font-bold">Oxford<span class="text-cyan-300">Marketing</span></h1>
+
+<body>
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-indicator">
+        <div class="scroll-progress" id="scrollProgress"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar fixed top-0 w-full z-50 py-4">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <div class="text-2xl font-bold text-gradient">CCP</div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#home" class="hover:text-red-500 transition-colors duration-300">Home</a>
+                <a href="#about" class="hover:text-red-500 transition-colors duration-300">About</a>
+                <a href="#skills" class="hover:text-red-500 transition-colors duration-300">Skills</a>
+                <a href="#experience" class="hover:text-red-500 transition-colors duration-300">Experience</a>
+                <a href="#projects" class="hover:text-red-500 transition-colors duration-300">Projects</a>
+                <a href="#contact" class="hover:text-red-500 transition-colors duration-300">Contact</a>
             </div>
-            
-            <nav class="hidden lg:flex space-x-8">
-                <a href="#" class="hover:text-cyan-300 transition font-medium">Home</a>
-                <a href="#" class="hover:text-cyan-300 transition font-medium">Coolers</a>
-                <a href="#" class="hover:text-cyan-300 transition font-medium">Commercial</a>
-                <a href="#" class="hover:text-cyan-300 transition font-medium">Accessories</a>
-                <a href="#" class="hover:text-cyan-300 transition font-medium">Support</a>
-            </nav>
-            
-            <div class="flex items-center space-x-4">
-                <button class="hidden md:flex items-center space-x-1 text-white hover:text-cyan-300">
-                    <i class="fas fa-search"></i>
-                </button>
-                <button class="hidden md:flex items-center space-x-1 text-white hover:text-cyan-300">
-                    <i class="fas fa-user"></i>
-                </button>
-                <button class="bg-cyan-400 hover:bg-cyan-500 px-4 py-2 rounded-full text-blue-900 font-medium transition flex items-center space-x-2">
-                    <i class="fas fa-phone-alt"></i>
-                    <span>Call Now</span>
-                </button>
-                <button class="lg:hidden text-2xl">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
-        </div>
-    </header>
-    
-    <!-- Hero Section -->
-    <section class="relative overflow-hidden bg-gradient-to-b from-blue-50 to-white pt-10 pb-20">
-    <div class="container mx-auto px-4 flex flex-col lg:flex-row items-center">
-        <div class="lg:w-1/2 mb-12 lg:mb-0 relative z-10">
-            <!-- Adjusted text sizes for better mobile responsiveness -->
-            <h1 class="text-xl sm:text-4xl md:text-5xl font-bold text-blue-900 mb-4 leading-tight">Stay Cool This Summer with <span class="text-blue-600">Premium Air Coolers</span></h1>
-            <p class="text-base sm:text-lg text-gray-700 mb-8 max-w-lg">Experience 40°C like 25°C with our energy-efficient, high-performance desert coolers designed for Indian weather conditions.</p>
-                
-                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition transform hover:scale-105 flex items-center justify-center space-x-2">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span>Shop Coolers</span>
-                    </button>
-                    <button class="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-6 py-3 rounded-lg font-medium transition transform hover:scale-105 flex items-center justify-center space-x-2">
-                        <i class="fas fa-play-circle"></i>
-                        <span>How It Works</span>
-                    </button>
-                </div>
-                
-                <div class="mt-10 flex flex-wrap gap-4">
-                    <div class="flex items-center space-x-2 bg-white px-4 py-2 rounded-lg shadow-sm">
-                        <i class="fas fa-check-circle text-green-500"></i>
-                        <span>Free Installation</span>
-                    </div>
-                    <div class="flex items-center space-x-2 bg-white px-4 py-2 rounded-lg shadow-sm">
-                        <i class="fas fa-shield-alt text-blue-500"></i>
-                        <span>5 Year Warranty</span>
-                    </div>
-                    <div class="flex items-center space-x-2 bg-white px-4 py-2 rounded-lg shadow-sm">
-                        <i class="fas fa-truck text-orange-500"></i>
-                        <span>Next Day Delivery</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="lg:w-1/2 relative">
-                <div class="relative">
-                    <img src="https://m.media-amazon.com/images/I/71H+2+5Z6IL._AC_UF1000,1000_QL80_.jpg" alt="Premium Air Cooler" class="w-full max-w-xl mx-auto rounded-xl shadow-2xl transform rotate-1 hover:rotate-0 transition duration-300">
-                    
-                    <div class="absolute -bottom-6 -right-6 bg-white p-4 rounded-xl shadow-lg border border-gray-100">
-                        <div class="text-center">
-                            <p class="text-sm text-gray-500 font-medium">Starting at just</p>
-                            <p class="text-2xl font-bold text-blue-600">₹7,999</p>
-                            <p class="text-xs text-gray-500">EMI from ₹699/month</p>
-                        </div>
-                    </div>
-                    
-                    <div class="absolute -top-8 -left-8">
-                        <div class="temperature-display">
-                            <div class="text-center">
-                                <div class="text-sm">Cools up to</div>
-                                <div class="text-2xl">45°C</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-    </section>
-    
-    <!-- Brands Section -->
-    <section class="py-12 bg-white">
-        <div class="container mx-auto px-4">
-            <div class="overflow-hidden whitespace-nowrap">
-                <marquee behavior="scroll" direction="left" scrollamount="5" class="flex items-center gap-16 opacity-70">
-                    <img src="https://imgs.search.brave.com/AEzlco6-4L29XHceYwum022Yy51RuOz1Nf8EZ30y210/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9sb2dv/d2lrLmNvbS9jb250/ZW50L3VwbG9hZHMv/aW1hZ2VzL3N5bXBo/b255NTg1NC5qcGc" alt="Symphony" class="h-8 inline-block">
-                    <img src="https://imgs.search.brave.com/YFRycY4D6iKop25yJ9dUoXcZ7xGk92kccy_c7130DWE/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzZjL2Nj/L2QxLzZjY2NkMTYx/M2ZiNjRhZjMyNGYz/MTk1OGQ2YTUzYmRm/LmpwZw" alt="Bajaj" class="h-10 inline-block">
-                    <img src="https://imgs.search.brave.com/ME5txYlQslOoL7Chvy4X-P8F0LNDqyrJKP-1FS6akBY/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9sb2dv/d2lrLmNvbS9jb250/ZW50L3VwbG9hZHMv/aW1hZ2VzL2Nyb21w/dG9uLWdyZWF2ZXMt/Y29uc3VtZXItZWxl/Y3RyaWNhbHMtbGlt/aXRlZDg5NjkuanBn" alt="Crompton" class="h-8 inline-block">
-                    <img src="https://imgs.search.brave.com/7PExycyv9sduZc1Pg3YhEDWOilii9qIwbtdzF36g9b0/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly93d3cu/bG9nby53aW5lL2Ev/bG9nby9Ib25leXdl/bGwvSG9uZXl3ZWxs/LUxvZ28ud2luZS5z/dmc" alt="Honeywell" class="h-6 inline-block">
-                    <img src="https://imgs.search.brave.com/_cF7dQccHe2-Vd3w9rKwj5_JZJ_SGCTlq9NzAPefY3Y/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9wbGF5/LWxoLmdvb2dsZXVz/ZXJjb250ZW50LmNv/bS9nSGRNaXkyT1hm/RmNGc0ItWlphclpJ/WkhYMjhBRDlXSG84/S012ZnA1d19peU5P/R2VJaWN4U2x0RElm/akxJUnNXQ1lBPXcy/NDAtaDQ4MC1ydw.jpeg" alt="Kenstar" class="h-8 inline-block">
-                </marquee>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Products Section -->
-    <section class="py-16 bg-gray-50">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-blue-900 mb-3">Our Best Selling Coolers</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">Designed for Indian summers with high cooling efficiency and low power consumption</p>
-            </div>
-            
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                <!-- Product 1 -->
-                <div class="cooler-card" onclick="openProductModal('Symphony Diet 3D 35L', '8999', 'https://imgs.search.brave.com/jjySWuXxul-x7cKUe7Uc05rSoAPiGyzUDoBwaFRvn1w/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/NDE5d2lTK2d2LUwu/anBn', '35L', '3 Speed', 'Blue/White', '4.2', '128', 'The Symphony Diet 3D 35L Air Cooler is a personal air cooler suitable for small rooms up to 12 sq.m. It features Everlast Pump, 3-side DuraPads, and 3-speed control. Perfect for bedrooms, study rooms, and small offices.')">
-                    <div class="relative overflow-hidden h-64">
-                        <div class="blur-load h-full w-full bg-gray-200" style="background-image: url('https://m.media-amazon.com/images/I/61O7H+MJmFL._AC_UF1000,1000_QL80_.jpg')">
-                            <img src="https://imgs.search.brave.com/jjySWuXxul-x7cKUe7Uc05rSoAPiGyzUDoBwaFRvn1w/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/NDE5d2lTK2d2LUwu/anBn" alt="Symphony Diet 3D 35L" class="w-full h-full object-contain p-4">
-                        </div>
-                        <div class="absolute top-3 right-3 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded-full">BESTSELLER</div>
-                    </div>
-                    <div class="p-5">
-                        <h3 class="font-bold text-lg mb-1 text-gray-800">Symphony Diet 3D 35L</h3>
-                        <div class="flex items-center mb-3">
-                            <div class="flex text-yellow-400 mr-1">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                            </div>
-                            <span class="text-gray-500 text-sm">(128 reviews)</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <p class="text-xl font-bold text-blue-600">₹8,999</p>
-                            <div class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">35L Capacity</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Product 2 -->
-                <div class="cooler-card" onclick="openProductModal('Bajaj DMH 65 Neo', '12999', 'https://imgs.search.brave.com/s2BbhPW4h4qDBNoRUwoM9ZbeA6ArXow6u_RIFOzmlaA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tb29u/YWlyLmluL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDI0LzA1LzMt/Mi5qcGc', '65L', '3 Speed', 'White', '4.1', '95', 'The Bajaj DMH 65 Neo Desert Air Cooler comes with DuraMarine Pump, Anti-bacterial Hexacool Pads, and 4-way Air Deflection for uniform cooling in medium to large rooms up to 25 sq.m. Ideal for living rooms and medium offices.')">
-                    <div class="relative overflow-hidden h-64">
-                        <div class="blur-load h-full w-full bg-gray-200" style="background-image: url('https://m.media-amazon.com/images/I/71H+2+5Z6IL._AC_UF1000,1000_QL80_.jpg')">
-                            <img src="https://imgs.search.brave.com/s2BbhPW4h4qDBNoRUwoM9ZbeA6ArXow6u_RIFOzmlaA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tb29u/YWlyLmluL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDI0LzA1LzMt/Mi5qcGc" alt="Bajaj DMH 65 Neo" class="w-full h-full object-contain p-4">
-                        </div>
-                    </div>
-                    <div class="p-5">
-                        <h3 class="font-bold text-lg mb-1 text-gray-800">MoonAir DMH 65 Neo</h3>
-                        <div class="flex items-center mb-3">
-                            <div class="flex text-yellow-400 mr-1">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="far fa-star"></i>
-                            </div>
-                            <span class="text-gray-500 text-sm">(95 reviews)</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <p class="text-xl font-bold text-blue-600">₹12,999</p>
-                            <div class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">65L Capacity</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Product 3 -->
-                <div class="cooler-card" onclick="openProductModal('Honeywell Desert 55L', '14999', 'https://imgs.search.brave.com/JCHnCRifnttfT5Ed_7FwIP_VCG7yVRvmLc5I2HhLryU/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9tb29u/YWlyLmluL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDIzLzAxLzcx/UzBZZVY1SnpMLl9T/WDUyMl8uanBn', '55L', '4 Speed', 'Grey', '4.5', '154', 'Honeywell Desert 55L Air Cooler features Turbo Moist technology, 4-speed control, and auto water filling with large wheels for easy mobility. Covers areas up to 30 sq.m with its powerful airflow. Suitable for large rooms and halls.')">
-                    <div class="relative overflow-hidden h-64">
-                        <div class="blur-load h-full w-full bg-gray-200" style="background-image: url('https://m.media-amazon.com/images/I/71p0Q5X1BVL._AC_UF1000,1000_QL80_.jpg')">
-                            <img src="https://imgs.search.brave.com/JCHnCRifnttfT5Ed_7FwIP_VCG7yVRvmLc5I2HhLryU/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9tb29u/YWlyLmluL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDIzLzAxLzcx/UzBZZVY1SnpMLl9T/WDUyMl8uanBn" alt="Honeywell Desert 55L" class="w-full h-full object-contain p-4">
-                        </div>
-                        <div class="absolute top-3 right-3 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">NEW</div>
-                    </div>
-                    <div class="p-5">
-                        <h3 class="font-bold text-lg mb-1 text-gray-800">Honeywell Desert 55L</h3>
-                        <div class="flex items-center mb-3">
-                            <div class="flex text-yellow-400 mr-1">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <span class="text-gray-500 text-sm">(154 reviews)</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <p class="text-xl font-bold text-blue-600">₹14,999</p>
-                            <div class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">55L Capacity</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Product 4 -->
-                <div class="cooler-card" onclick="openProductModal('Crompton Ozone 75L', '15999', 'https://imgs.search.brave.com/JCHnCRifnttfT5Ed_7FwIP_VCG7yVRvmLc5I2HhLryU/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9tb29u/YWlyLmluL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDIzLzAxLzcx/UzBZZVY1SnpMLl9T/WDUyMl8uanBn', '75L', '3 Speed', 'Blue/White', '4.3', '112', 'Crompton Ozone 75L Desert Air Cooler features large capacity, high air delivery, and anti-bacterial treated honeycomb cooling pads for hygienic cooling. Ideal for very large rooms up to 35 sq.m and outdoor areas.')">
-                    <div class="relative overflow-hidden h-64">
-                        <div class="blur-load h-full w-full bg-gray-200" style="background-image: url('https://m.media-amazon.com/images/I/71v4+5S6LIL._AC_UF1000,1000_QL80_.jpg')">
-                            <img src="https://imgs.search.brave.com/JCHnCRifnttfT5Ed_7FwIP_VCG7yVRvmLc5I2HhLryU/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9tb29u/YWlyLmluL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDIzLzAxLzcx/UzBZZVY1SnpMLl9T/WDUyMl8uanBn" alt="Crompton Ozone 75L" class="w-full h-full object-contain p-4">
-                        </div>
-                        <div class="absolute top-3 right-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">LIMITED STOCK</div>
-                    </div>
-                    <div class="p-5">
-                        <h3 class="font-bold text-lg mb-1 text-gray-800">Crompton Ozone 75L</h3>
-                        <div class="flex items-center mb-3">
-                            <div class="flex text-yellow-400 mr-1">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                            </div>
-                            <span class="text-gray-500 text-sm">(112 reviews)</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <p class="text-xl font-bold text-blue-600">₹15,999</p>
-                            <div class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">75L Capacity</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="text-center mt-12">
-                <button class="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-8 py-3 rounded-lg font-medium transition transform hover:scale-105">
-                    View All 12+ Coolers
-                </button>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Features Section -->
-    <section class="py-16 bg-white">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-blue-900 mb-3">Why Choose Oxford Marketing?</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">Engineered for maximum cooling with minimum energy consumption</p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div class="bg-gray-50 p-6 rounded-xl hover:bg-blue-50 transition">
-                    <div class="feature-icon mb-4">
-                        <i class="fas fa-snowflake"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-2 text-blue-800">Advanced Cooling</h3>
-                    <p class="text-gray-600">Honeycomb cooling pads provide 30% better cooling than conventional designs.</p>
-                </div>
-                
-                <div class="bg-gray-50 p-6 rounded-xl hover:bg-blue-50 transition">
-                    <div class="feature-icon mb-4">
-                        <i class="fas fa-bolt"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-2 text-blue-800">Energy Efficient</h3>
-                    <p class="text-gray-600">Consumes 90% less power than AC while delivering effective cooling.</p>
-                </div>
-                
-                <div class="bg-gray-50 p-6 rounded-xl hover:bg-blue-50 transition">
-                    <div class="feature-icon mb-4">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-2 text-blue-800">5 Year Warranty</h3>
-                    <p class="text-gray-600">Comprehensive warranty on motor and body for worry-free ownership.</p>
-                </div>
-                
-                <div class="bg-gray-50 p-6 rounded-xl hover:bg-blue-50 transition">
-                    <div class="feature-icon mb-4">
-                        <i class="fas fa-tint"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-2 text-blue-800">Auto Water Fill</h3>
-                    <p class="text-gray-600">Available in premium models for continuous cooling without manual refill.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Testimonials -->
-    <section class="py-16 bg-blue-50">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-blue-900 mb-3">What Our Customers Say</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">Real experiences from customers across India</p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="review-card p-6">
-                    <div class="flex items-center mb-4">
-                        <div class="flex text-yellow-400 mr-2">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <span class="text-gray-500">5/5</span>
-                    </div>
-                    <p class="mb-4 italic text-gray-700">"The Symphony cooler has been a lifesaver this summer in Delhi. It cools my 12x12 room within minutes and uses very little electricity compared to AC."</p>
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mr-3 text-blue-600">
-                            <i class="fas fa-user"></i>
-                        </div>
-                        <div>
-                            <p class="font-medium">Rajesh Kumar</p>
-                            <p class="text-sm text-gray-500">New Delhi</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="review-card p-6">
-                    <div class="flex items-center mb-4">
-                        <div class="flex text-yellow-400 mr-2">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                        </div>
-                        <span class="text-gray-500">4.5/5</span>
-                    </div>
-                    <p class="mb-4 italic text-gray-700">"Bought the Bajaj cooler last month. Excellent cooling even in Jaipur's 45°C heat. The water tank lasts all night on medium speed."</p>
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mr-3 text-blue-600">
-                            <i class="fas fa-user"></i>
-                        </div>
-                        <div>
-                            <p class="font-medium">Priya Sharma</p>
-                            <p class="text-sm text-gray-500">Jaipur</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="review-card p-6">
-                    <div class="flex items-center mb-4">
-                        <div class="flex text-yellow-400 mr-2">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <span class="text-gray-500">5/5</span>
-                    </div>
-                    <p class="mb-4 italic text-gray-700">"The Honeywell cooler is worth every penny. Very silent operation and the auto-fill feature means I don't have to worry about water levels."</p>
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mr-3 text-blue-600">
-                            <i class="fas fa-user"></i>
-                        </div>
-                        <div>
-                            <p class="font-medium">Amit Patel</p>
-                            <p class="text-sm text-gray-500">Ahmedabad</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- CTA Section -->
-    <section class="py-16 bg-gradient-to-r from-blue-600 to-blue-800 text-white">
-        <div class="container mx-auto px-4 text-center">
-            <h2 class="text-3xl font-bold mb-4">Need Help Choosing the Right Cooler?</h2>
-            <p class="text-xl mb-8 max-w-2xl mx-auto">Our cooling experts will help you select the perfect cooler for your space and budget.</p>
-            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-                <button class="bg-white text-blue-600 hover:bg-blue-50 px-8 py-3 rounded-lg font-medium transition transform hover:scale-105">
-                    <i class="fas fa-phone-alt mr-2"></i> Call Now: 1234567890
-                </button>
-                <button class="border-2 border-white hover:bg-blue-700 px-8 py-3 rounded-lg font-medium transition transform hover:scale-105">
-                    <i class="fas fa-comments mr-2"></i> Chat with Expert
-                </button>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Footer -->
-    <footer class="bg-blue-900 text-white pt-12 pb-6">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-                <div>
-                    <h3 class="text-xl font-bold mb-4 flex items-center">
-                        <div class="bg-white p-2 rounded-full mr-2">
-                            <i class="fas fa-snowflake text-blue-600"></i>
-                        </div>
-                        Oxford Marketing
-                    </h3>
-                    <p class="text-blue-200 mb-4">India's trusted cooling solutions provider since 2012.</p>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-blue-300 hover:text-white text-xl"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="text-blue-300 hover:text-white text-xl"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="text-blue-300 hover:text-white text-xl"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="text-blue-300 hover:text-white text-xl"><i class="fab fa-youtube"></i></a>
-                    </div>
-                </div>
-                
-                <div>
-                    <h4 class="font-bold text-lg mb-4">Shop</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-blue-200 hover:text-white">Personal Coolers</a></li>
-                        <li><a href="#" class="text-blue-200 hover:text-white">Desert Coolers</a></li>
-                        <li><a href="#" class="text-blue-200 hover:text-white">Tower Coolers</a></li>
-                        <li><a href="#" class="text-blue-200 hover:text-white">Commercial Coolers</a></li>
-                        <li><a href="#" class="text-blue-200 hover:text-white">Accessories</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h4 class="font-bold text-lg mb-4">Support</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-blue-200 hover:text-white">Contact Us</a></li>
-                        <li><a href="#" class="text-blue-200 hover:text-white">FAQs</a></li>
-                        <li><a href="#" class="text-blue-200 hover:text-white">Warranty</a></li>
-                        <li><a href="#" class="text-blue-200 hover:text-white">Service Centers</a></li>
-                        <li><a href="#" class="text-blue-200 hover:text-white">Track Order</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h4 class="font-bold text-lg mb-4">Company</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-blue-200 hover:text-white">About Us</a></li>
-                        <li><a href="#" class="text-blue-200 hover:text-white">Blog</a></li>
-                        <li><a href="#" class="text-blue-200 hover:text-white">Careers</a></li>
-                        <li><a href="#" class="text-blue-200 hover:text-white">Privacy Policy</a></li>
-                        <li><a href="#" class="text-blue-200 hover:text-white">Terms of Service</a></li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="border-t border-blue-800 pt-6 flex flex-col md:flex-row justify-between items-center">
-                <p class="text-blue-300 mb-4 md:mb-0">© 2025 Oxford Marketing All Rights Reserved.</p>
-                <div class="flex space-x-6">
-                    <img src="https://www.logolynx.com/images/logolynx/c3/c36093ca9fb6c5f16a880a1f7a9fad3d.png" alt="Visa" class="h-8 opacity-70">
-                    <img src="https://www.logolynx.com/images/logolynx/d3/d3a042b6f9c0a3e9a046e2fca6a3ac48.png" alt="Mastercard" class="h-8 opacity-70">
-                    <img src="https://www.logolynx.com/images/logolynx/9a/9a6cd8e23d9f7a3a9c42d2e9624a2f48.png" alt="Paytm" class="h-8 opacity-70">
-                    <img src="https://www.logolynx.com/images/logolynx/9f/9f5a1a5c9c6e7e3e3e3e3e3e3e3e3e3e.png" alt="UPI" class="h-8 opacity-70">
-                </div>
-            </div>
-        </div>
-    </footer>
-    
-    <!-- Product Modal -->
-    <div id="product-modal" class="product-modal">
-        <div class="container mx-auto px-4 py-12">
-            <button onclick="closeProductModal()" class="mb-6 text-gray-500 hover:text-gray-700 transition flex items-center">
-                <i class="fas fa-arrow-left mr-2"></i> Back to Products
+            <button class="md:hidden text-white" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
             </button>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <!-- Product Images -->
-                <div>
-                    <div class="bg-gray-100 rounded-xl p-6 mb-4">
-                        <img id="modal-product-image" src="" alt="Cooler" class="w-full h-80 object-contain">
-                    </div>
-                    <div class="grid grid-cols-4 gap-3">
-                        <div class="border rounded-lg p-2 cursor-pointer bg-gray-100">
-                            <img id="modal-product-image" src="" alt="Cooler" class="w-full h-20 object-contain">
-                        </div>
-                        <div class="border rounded-lg p-2 cursor-pointer hover:bg-gray-100">
-                            <img src="https://m.media-amazon.com/images/I/61O7H+MJmFL._AC_UF1000,1000_QL80_.jpg" alt="Cooler" class="w-full h-20 object-contain">
-                        </div>
-                        <div class="border rounded-lg p-2 cursor-pointer hover:bg-gray-100">
-                            <img src="https://m.media-amazon.com/images/I/71H+2+5Z6IL._AC_UF1000,1000_QL80_.jpg" alt="Cooler" class="w-full h-20 object-contain">
-                        </div>
-                        <div class="border rounded-lg p-2 cursor-pointer hover:bg-gray-100">
-                            <img src="https://m.media-amazon.com/images/I/71p0Q5X1BVL._AC_UF1000,1000_QL80_.jpg" alt="Cooler" class="w-full h-20 object-contain">
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Product Details -->
-                <div>
-                    <h1 id="modal-product-title" class="text-3xl font-bold text-gray-900 mb-2"></h1>
-                    <div class="flex items-center mb-4">
-                        <div class="flex text-yellow-400 mr-2">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                        </div>
-                        <span class="text-gray-500 mr-3" id="modal-product-rating"></span>
-                        <span class="text-blue-600 font-medium" id="modal-product-reviews"></span>
-                    </div>
-                    
-                    <div class="bg-blue-50 rounded-xl p-4 mb-6">
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <p class="text-3xl font-bold text-blue-600" id="modal-product-price"></p>
-                                <p class="text-green-600 font-medium flex items-center">
-                                    <i class="fas fa-check-circle mr-1"></i> In Stock
-                                </p>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-sm">Delivery: <span class="font-medium">Tomorrow</span></p>
-                                <p class="text-sm">Free Installation</p>
-                                <p class="text-sm">EMI from <span class="font-medium">₹699/month</span></p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="mb-6">
-                        <h3 class="font-bold text-lg mb-3">Key Specifications</h3>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="flex items-center">
-                                <div class="bg-blue-100 w-10 h-10 rounded-full flex items-center justify-center mr-3 text-blue-600">
-                                    <i class="fas fa-tint"></i>
-                                </div>
-                                <div>
-                                    <p class="text-sm text-gray-500">Capacity</p>
-                                    <p class="font-medium" id="modal-product-capacity"></p>
-                                </div>
-                            </div>
-                            <div class="flex items-center">
-                                <div class="bg-blue-100 w-10 h-10 rounded-full flex items-center justify-center mr-3 text-blue-600">
-                                    <i class="fas fa-fan"></i>
-                                </div>
-                                <div>
-                                    <p class="text-sm text-gray-500">Speed Settings</p>
-                                    <p class="font-medium" id="modal-product-speed"></p>
-                                </div>
-                            </div>
-                            <div class="flex items-center">
-                                <div class="bg-blue-100 w-10 h-10 rounded-full flex items-center justify-center mr-3 text-blue-600">
-                                    <i class="fas fa-palette"></i>
-                                </div>
-                                <div>
-                                    <p class="text-sm text-gray-500">Color</p>
-                                    <p class="font-medium" id="modal-product-color"></p>
-                                </div>
-                            </div>
-                            <div class="flex items-center">
-                                <div class="bg-blue-100 w-10 h-10 rounded-full flex items-center justify-center mr-3 text-blue-600">
-                                    <i class="fas fa-shield-alt"></i>
-                                </div>
-                                <div>
-                                    <p class="text-sm text-gray-500">Warranty</p>
-                                    <p class="font-medium">5 Years</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="mb-8">
-                        <h3 class="font-bold text-lg mb-3">Product Description</h3>
-                        <p class="text-gray-700" id="modal-product-description"></p>
-                    </div>
-                    
-                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition flex-1 flex items-center justify-center space-x-2">
-                            <i class="fas fa-shopping-cart"></i>
-                            <span>Add to Cart</span>
-                        </button>
-                        <button class="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-6 py-3 rounded-lg font-medium transition flex-1">
-                            Buy Now
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Tabs -->
-            <div class="mt-16">
-                <div class="border-b border-gray-200">
-                    <div class="flex space-x-8">
-                        <button class="tab-button font-medium text-gray-500 hover:text-gray-700 pb-3 active" onclick="openTab('details')">
-                            Product Details
-                        </button>
-                        <button class="tab-button font-medium text-gray-500 hover:text-gray-700 pb-3" onclick="openTab('specs')">
-                            Specifications
-                        </button>
-                        <button class="tab-button font-medium text-gray-500 hover:text-gray-700 pb-3" onclick="openTab('reviews')">
-                            Reviews
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Tab Content -->
-                <div class="py-8">
-                    <div id="details" class="tab-content">
-                        <h3 class="text-xl font-bold mb-4">Detailed Features</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="flex items-start">
-                                <div class="bg-blue-100 p-2 rounded-lg mr-4">
-                                    <i class="fas fa-check text-blue-600"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold mb-1">High Efficiency Cooling</h4>
-                                    <p class="text-gray-600">Special honeycomb cooling pads provide 30% better cooling than conventional designs.</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start">
-                                <div class="bg-blue-100 p-2 rounded-lg mr-4">
-                                    <i class="fas fa-check text-blue-600"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold mb-1">Energy Saving</h4>
-                                    <p class="text-gray-600">Consumes only 180W on high speed, saving up to 90% electricity compared to AC.</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start">
-                                <div class="bg-blue-100 p-2 rounded-lg mr-4">
-                                    <i class="fas fa-check text-blue-600"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold mb-1">Durable Construction</h4>
-                                    <p class="text-gray-600">Rust-proof ABS plastic body with reinforced base for long-lasting performance.</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start">
-                                <div class="bg-blue-100 p-2 rounded-lg mr-4">
-                                    <i class="fas fa-check text-blue-600"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold mb-1">Easy Mobility</h4>
-                                    <p class="text-gray-600">4 heavy-duty castor wheels for easy movement across rooms.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div id="specs" class="tab-content hidden">
-                        <h3 class="text-xl font-bold mb-4">Technical Specifications</h3>
-                        <div class="bg-gray-50 rounded-xl p-6">
-                            <table class="w-full">
-                                <tbody class="divide-y divide-gray-200">
-                                    <tr>
-                                        <td class="py-3 font-medium">Brand</td>
-                                        <td class="py-3 text-gray-600" id="modal-product-brand"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="py-3 font-medium">Model</td>
-                                        <td class="py-3 text-gray-600" id="modal-product-model"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="py-3 font-medium">Color</td>
-                                        <td class="py-3 text-gray-600" id="modal-product-spec-color"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="py-3 font-medium">Capacity</td>
-                                        <td class="py-3 text-gray-600" id="modal-product-spec-capacity"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="py-3 font-medium">Speed Settings</td>
-                                        <td class="py-3 text-gray-600" id="modal-product-spec-speed"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="py-3 font-medium">Coverage Area</td>
-                                        <td class="py-3 text-gray-600">Up to 250 sq.ft</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="py-3 font-medium">Power Consumption</td>
-                                        <td class="py-3 text-gray-600">180W (Max)</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="py-3 font-medium">Water Tank</td>
-                                        <td class="py-3 text-gray-600" id="modal-product-spec-tank"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="py-3 font-medium">Warranty</td>
-                                        <td class="py-3 text-gray-600">5 years on motor, 2 years on product</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="py-3 font-medium">Dimensions</td>
-                                        <td class="py-3 text-gray-600">28 x 22 x 36 inches</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="py-3 font-medium">Weight</td>
-                                        <td class="py-3 text-gray-600">12.5 kg</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    
-                    <div id="reviews" class="tab-content hidden">
-                        <h3 class="text-xl font-bold mb-4">Customer Reviews</h3>
-                        <div class="space-y-6">
-                            <div class="bg-white p-6 rounded-xl shadow-sm">
-                                <div class="flex justify-between mb-3">
-                                    <div class="flex items-center">
-                                        <div class="flex text-yellow-400 mr-2">
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                        </div>
-                                        <span class="font-medium">Excellent Cooling</span>
-                                    </div>
-                                    <span class="text-gray-500 text-sm">2 weeks ago</span>
-                                </div>
-                                <p class="text-gray-700 mb-3">"This cooler is perfect for my bedroom. Cools quickly and doesn't make much noise. The remote control is very convenient."</p>
-                                <div class="flex items-center">
-                                    <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center mr-3">
-                                        <i class="fas fa-user text-gray-600"></i>
-                                    </div>
-                                    <div>
-                                        <p class="font-medium">Rahul Verma</p>
-                                        <p class="text-sm text-gray-500">Mumbai</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="bg-white p-6 rounded-xl shadow-sm">
-                                <div class="flex justify-between mb-3">
-                                    <div class="flex items-center">
-                                        <div class="flex text-yellow-400 mr-2">
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="far fa-star"></i>
-                                        </div>
-                                        <span class="font-medium">Good Value</span>
-                                    </div>
-                                    <span class="text-gray-500 text-sm">1 month ago</span>
-                                </div>
-                                <p class="text-gray-700 mb-3">"Works well in my living room. Cools effectively but needs frequent water refill during peak summer days. Overall satisfied with the purchase."</p>
-                                <div class="flex items-center">
-                                    <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center mr-3">
-                                        <i class="fas fa-user text-gray-600"></i>
-                                    </div>
-                                    <div>
-                                        <p class="font-medium">Priya Singh</p>
-                                        <p class="text-sm text-gray-500">Bangalore</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="bg-white p-6 rounded-xl shadow-sm">
-                                <div class="flex justify-between mb-3">
-                                    <div class="flex items-center">
-                                        <div class="flex text-yellow-400 mr-2">
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star-half-alt"></i>
-                                        </div>
-                                        <span class="font-medium">Happy with Purchase</span>
-                                    </div>
-                                    <span class="text-gray-500 text-sm">2 months ago</span>
-                                </div>
-                                <p class="text-gray-700 mb-3">"The auto-swing feature is great for uniform cooling. Installation was quick and the service team was professional. Would recommend this product."</p>
-                                <div class="flex items-center">
-                                    <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center mr-3">
-                                        <i class="fas fa-user text-gray-600"></i>
-                                    </div>
-                                    <div>
-                                        <p class="font-medium">Amit Patel</p>
-                                        <p class="text-sm text-gray-500">Ahmedabad</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <button class="mt-6 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-6 py-2 rounded-lg font-medium transition">
-                            Load More Reviews
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Related Products -->
-            <div class="mt-16">
-                <h3 class="text-2xl font-bold mb-6">You May Also Like</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="cooler-card bg-white rounded-xl overflow-hidden shadow-sm">
-                        <div class="relative overflow-hidden h-48">
-                            <img src="https://m.media-amazon.com/images/I/61O7H+MJmFL._AC_UF1000,1000_QL80_.jpg" alt="Symphony Diet 3D 35L" class="w-full h-full object-contain p-4">
-                        </div>
-                        <div class="p-4">
-                            <h3 class="font-bold text-lg mb-1">Symphony Diet 3D 35L</h3>
-                            <div class="flex items-center mb-2">
-                                <div class="flex text-yellow-400 mr-1">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                </div>
-                                <span class="text-gray-500 text-sm">(128)</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <p class="text-xl font-bold text-blue-600">₹8,999</p>
-                                <div class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">35L</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="cooler-card bg-white rounded-xl overflow-hidden shadow-sm">
-                        <div class="relative overflow-hidden h-48">
-                            <img src="https://m.media-amazon.com/images/I/71H+2+5Z6IL._AC_UF1000,1000_QL80_.jpg" alt="Bajaj DMH 65 Neo" class="w-full h-full object-contain p-4">
-                        </div>
-                        <div class="p-4">
-                            <h3 class="font-bold text-lg mb-1">Bajaj DMH 65 Neo</h3>
-                            <div class="flex items-center mb-2">
-                                <div class="flex text-yellow-400 mr-1">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                </div>
-                                <span class="text-gray-500 text-sm">(95)</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <p class="text-xl font-bold text-blue-600">₹12,999</p>
-                                <div class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">65L</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="cooler-card bg-white rounded-xl overflow-hidden shadow-sm">
-                        <div class="relative overflow-hidden h-48">
-                            <img src="https://m.media-amazon.com/images/I/71p0Q5X1BVL._AC_UF1000,1000_QL80_.jpg" alt="Honeywell Desert 55L" class="w-full h-full object-contain p-4">
-                        </div>
-                        <div class="p-4">
-                            <h3 class="font-bold text-lg mb-1">Honeywell Desert 55L</h3>
-                            <div class="flex items-center mb-2">
-                                <div class="flex text-yellow-400 mr-1">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                </div>
-                                <span class="text-gray-500 text-sm">(154)</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <p class="text-xl font-bold text-blue-600">₹14,999</p>
-                                <div class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">55L</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="cooler-card bg-white rounded-xl overflow-hidden shadow-sm">
-                        <div class="relative overflow-hidden h-48">
-                            <img src="https://m.media-amazon.com/images/I/71v4+5S6LIL._AC_UF1000,1000_QL80_.jpg" alt="Crompton Ozone 75L" class="w-full h-full object-contain p-4">
-                        </div>
-                        <div class="p-4">
-                            <h3 class="font-bold text-lg mb-1">Crompton Ozone 75L</h3>
-                            <div class="flex items-center mb-2">
-                                <div class="flex text-yellow-400 mr-1">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                </div>
-                                <span class="text-gray-500 text-sm">(112)</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <p class="text-xl font-bold text-blue-600">₹15,999</p>
-                                <div class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">75L</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-95 z-40 hidden" id="mobileMenu">
+        <div class="flex flex-col items-center justify-center h-full space-y-8 text-xl">
+            <a href="#home" class="hover:text-red-500 transition-colors duration-300">Home</a>
+            <a href="#about" class="hover:text-red-500 transition-colors duration-300">About</a>
+            <a href="#skills" class="hover:text-red-500 transition-colors duration-300">Skills</a>
+            <a href="#experience" class="hover:text-red-500 transition-colors duration-300">Experience</a>
+            <a href="#projects" class="hover:text-red-500 transition-colors duration-300">Projects</a>
+            <a href="#contact" class="hover:text-red-500 transition-colors duration-300">Contact</a>
         </div>
     </div>
-    
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center relative">
+        <div class="container mx-auto px-6 text-center">
+            <div class="glass-effect rounded-3xl p-8 md:p-12 card max-w-4xl mx-auto" data-aos="fade-up">
+                <div class="mb-8">
+                    <h1 class="text-4xl md:text-7xl font-bold text-gradient mb-4">
+                        Chandan Charchita Panda
+                    </h1>
+                    <p class="text-xl md:text-2xl text-gray-300 mb-6">Java Developer & Full-Stack Engineer</p>
+                    <div class="flex flex-wrap justify-center gap-4 mb-8">
+                        <span
+                            class="px-4 py-2 bg-red-600 bg-opacity-20 rounded-full text-red-400 border border-red-600 border-opacity-30">
+                            Java
+                        </span>
+                        <span
+                            class="px-4 py-2 bg-red-600 bg-opacity-20 rounded-full text-red-400 border border-red-600 border-opacity-30">
+                            Spring Boot
+                        </span>
+                        <span
+                            class="px-4 py-2 bg-red-600 bg-opacity-20 rounded-full text-red-400 border border-red-600 border-opacity-30">
+                            React
+                        </span>
+                        <span
+                            class="px-4 py-2 bg-red-600 bg-opacity-20 rounded-full text-red-400 border border-red-600 border-opacity-30">
+                            MySQL
+                        </span>
+                    </div>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="#contact"
+                        class="red-gradient text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg hover:shadow-red-500/25 transition-all duration-300 transform hover:scale-105">
+                        Get In Touch
+                    </a>
+                    <a href="#projects"
+                        class="border border-red-600 text-red-400 px-8 py-3 rounded-full font-semibold hover:bg-red-600 hover:text-white transition-all duration-300 transform hover:scale-105">
+                        View Projects
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl md:text-5xl font-bold text-center text-gradient mb-16" data-aos="fade-up">About Me</h2>
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="glass-effect rounded-2xl p-8 card" data-aos="fade-right">
+                    <h3 class="text-2xl font-bold mb-6 text-red-400">Professional Summary</h3>
+                    <p class="text-gray-300 leading-relaxed mb-6">
+                        I'm a Java Developer with strong full-stack skills and a practical approach to problem-solving.
+                        I enjoy building real-world applications that solve everyday challenges—whether it's managing
+                        back-end logic with Java and Spring Boot or designing responsive UIs with React or Tailwind.
+                    </p>
+                    <p class="text-gray-300 leading-relaxed">
+                        I recently developed and deployed a Coaching Center Management System that's currently being
+                        used in a live environment. I'm now looking to join a team where I can grow as a developer and
+                        contribute to meaningful projects.
+                    </p>
+                </div>
+                <div class="glass-effect rounded-2xl p-8 card" data-aos="fade-left">
+                    <h3 class="text-2xl font-bold mb-6 text-red-400">Contact Information</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-map-marker-alt text-red-500"></i>
+                            <span>Berhampur, Odisha</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-phone text-red-500"></i>
+                            <span>+91-9777767188</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-envelope text-red-500"></i>
+                            <span>chandanpanda726@gmail.com</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <i class="fab fa-linkedin text-red-500"></i>
+                            <a href="https://linkedin.com/in/chandancharchita"
+                                class="hover:text-red-400 transition-colors">LinkedIn Profile</a>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <i class="fab fa-github text-red-500"></i>
+                            <a href="https://github.com/HLCodeverse" class="hover:text-red-400 transition-colors">GitHub
+                                Profile</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-20">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl md:text-5xl font-bold text-center text-gradient mb-16" data-aos="fade-up">Technical
+                Skills</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="glass-effect rounded-2xl p-6 card" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="text-center mb-6">
+                        <i class="fab fa-java text-5xl text-red-500 mb-4"></i>
+                        <h3 class="text-xl font-bold text-red-400">Languages</h3>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span>Java</span>
+                                <span>90%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="90%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span>HTML/CSS</span>
+                                <span>85%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="85%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span>MySQL</span>
+                                <span>80%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="80%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-effect rounded-2xl p-6 card" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="text-center mb-6">
+                        <i class="fas fa-cogs text-5xl text-red-500 mb-4"></i>
+                        <h3 class="text-xl font-bold text-red-400">Frameworks</h3>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span>Spring Boot</span>
+                                <span>85%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="85%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span>Tailwind CSS</span>
+                                <span>80%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="80%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-effect rounded-2xl p-6 card" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="text-center mb-6">
+                        <i class="fas fa-database text-5xl text-red-500 mb-4"></i>
+                        <h3 class="text-xl font-bold text-red-400">Databases</h3>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span>MySQL</span>
+                                <span>85%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="85%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-effect rounded-2xl p-6 card" data-aos="zoom-in" data-aos-delay="400">
+                    <div class="text-center mb-6">
+                        <i class="fas fa-tools text-5xl text-red-500 mb-4"></i>
+                        <h3 class="text-xl font-bold text-red-400">Tools</h3>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span>GitHub</span>
+                                <span>90%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="90%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span>VS Code</span>
+                                <span>85%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="85%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span>IntelliJ IDEA</span>
+                                <span>80%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="80%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience & Console Section -->
+    <section id="experience" class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-8 items-start">
+                <h2 class="text-4xl md:text-5xl font-bold text-center text-gradient mb-16" data-aos="fade-up">
+                    Professional Experience</h2>
+                <div class="max-w-4xl mx-auto">
+                    <div class="glass-effect rounded-2xl p-8 card" data-aos="fade-up">
+                        <div class="timeline-item">
+                            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+                                <h3 class="text-2xl font-bold text-red-400">Java Development Intern</h3>
+                                <span class="text-gray-400">July 2023 – September 2023</span>
+                            </div>
+                            <p class="text-xl text-gray-300 mb-4">ACEIT – Berhampur, Odisha</p>
+                            <ul class="space-y-3 text-gray-300">
+                                <li class="flex items-start space-x-3">
+                                    <i class="fas fa-check-circle text-red-500 mt-1"></i>
+                                    <span>Contributed to the development of Java-based backend systems, focusing on
+                                        modular,
+                                        scalable, and maintainable code architecture.</span>
+                                </li>
+                                <li class="flex items-start space-x-3">
+                                    <i class="fas fa-check-circle text-red-500 mt-1"></i>
+                                    <span>Wrote SQL queries and stored procedures to manage MySQL database operations,
+                                        improving query efficiency and data integrity.</span>
+                                </li>
+                                <li class="flex items-start space-x-3">
+                                    <i class="fas fa-check-circle text-red-500 mt-1"></i>
+                                    <span>Participated in requirement analysis, code reviews, and the implementation of
+                                        new
+                                        features for web applications.</span>
+                                </li>
+                                <li class="flex items-start space-x-3">
+                                    <i class="fas fa-check-circle text-red-500 mt-1"></i>
+                                    <span>Gained practical experience in object-oriented programming (OOP), JDBC, and
+                                        exception handling.</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- Console Container -->
+                    <div class="glass-effect rounded-2xl p-6 card" data-aos="fade-left">
+                        <div class="laptop-frame">
+                            <div class="screen">
+                                <div class="code-display font-mono text-sm" id="codeEditor"></div>
+                            </div>
+                            <div class="keyboard"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+
+    <style>
+        .laptop-frame {
+            background: #1a1a1a;
+            border-radius: 10px;
+            padding: 1rem;
+            position: relative;
+        }
+
+        .screen {
+            background: #0a0a0a;
+            border-radius: 5px;
+            padding: 1rem;
+            min-height: 300px;
+            position: relative;
+        }
+
+        .code-display {
+            white-space: pre-wrap;
+            color: #f8fafc;
+        }
+
+        .keyboard {
+            height: 20px;
+            background: #2a2a2a;
+            margin-top: 1rem;
+            border-radius: 3px;
+        }
+
+        .syntax-keyword {
+            color: #8b5cf6;
+        }
+
+        .syntax-function {
+            color: #a78bfa;
+        }
+
+        .syntax-string {
+            color: #34d399;
+        }
+
+        .syntax-comment {
+            color: #64748b;
+        }
+    </style>
+
     <script>
-        // Open product modal
-        function openProductModal(title, price, image, capacity, speed, color, rating, reviews, description) {
-            document.getElementById('modal-product-title').textContent = title;
-            document.getElementById('modal-product-price').textContent = `₹${price}`;
-            document.getElementById('modal-product-image').src = image;
-            document.getElementById('modal-product-capacity').textContent = capacity;
-            document.getElementById('modal-product-speed').textContent = speed;
-            document.getElementById('modal-product-color').textContent = color;
-            document.getElementById('modal-product-rating').textContent = rating;
-            document.getElementById('modal-product-reviews').textContent = `${reviews} reviews`;
-            document.getElementById('modal-product-description').textContent = description;
-            
-            // For specifications tab
-            document.getElementById('modal-product-brand').textContent = title.split(' ')[0];
-            document.getElementById('modal-product-model').textContent = title;
-            document.getElementById('modal-product-spec-color').textContent = color;
-            document.getElementById('modal-product-spec-capacity').textContent = capacity;
-            document.getElementById('modal-product-spec-speed').textContent = speed;
-            document.getElementById('modal-product-spec-tank').textContent = capacity;
-            
-            document.getElementById('product-modal').classList.add('active');
-            document.body.style.overflow = 'hidden';
+        const codeSnippets = [
+            `public class Main {\n    public static void main(String[] args) {\n        System.out.println("<span class='syntax-string'>\"Hello World!\"</span>");\n    }\n}`,
+            `@RestController\npublic class ApiController {\n    @GetMapping("/data")\n    public ResponseEntity<List<String>> getData() {\n        return ResponseEntity.ok(<span class='syntax-function'>fetchData</span>());\n    }\n}`,
+            `const express = require('express');\nconst app = express();\n\napp.get('/', (req, res) => {\n    res.send('<span class='syntax-string'>\"Welcome to My API\"</span>');\n});\n\napp.listen(3000);`
+        ];
+
+        let currentSnippet = 0;
+        const codeElement = document.getElementById('codeEditor');
+
+        function typeCode() {
+            let charIndex = 0;
+            codeElement.innerHTML = '';
+
+            const typing = setInterval(() => {
+                codeElement.innerHTML += codeSnippets[currentSnippet][charIndex];
+                charIndex++;
+
+                if (charIndex >= codeSnippets[currentSnippet].length) {
+                    clearInterval(typing);
+                    setTimeout(nextSnippet, 3000);
+                }
+            }, 50);
         }
-        
-        // Close product modal
-        function closeProductModal() {
-            document.getElementById('product-modal').classList.remove('active');
-            document.body.style.overflow = 'auto';
+
+        function nextSnippet() {
+            currentSnippet = (currentSnippet + 1) % codeSnippets.length;
+            typeCode();
         }
-        
-        // Tab functionality
-        function openTab(tabName) {
-            // Hide all tab contents
-            const tabContents = document.getElementsByClassName('tab-content');
-            for (let i = 0; i < tabContents.length; i++) {
-                tabContents[i].classList.add('hidden');
+
+        // Start typing effect
+        typeCode();
+    </script>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl md:text-5xl font-bold text-center text-gradient mb-16" data-aos="fade-up">Featured
+                Projects</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="glass-effect rounded-2xl p-6 card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="mb-6">
+                        <i class="fas fa-school text-4xl text-red-500 mb-4"></i>
+                        <h3 class="text-2xl font-bold text-red-400 mb-2">Coaching Center Management System</h3>
+                        <p class="text-gray-400 mb-4">October 2024 – Present</p>
+                    </div>
+                    <p class="text-gray-300 mb-6">
+                        A fully functional web-based management system for coaching centers, streamlining student
+                        enrollment, class scheduling, fee tracking, and teacher management. Currently in use by a local
+                        coaching center.
+                    </p>
+                    <div class="mb-6">
+                        <h4 class="text-lg font-semibold text-red-400 mb-3">Key Features:</h4>
+                        <ul class="space-y-2 text-gray-300">
+                            <li>• RESTful APIs with MySQL integration</li>
+                            <li>• Responsive UI with PHP, HTML, CSS, Tailwind CSS</li>
+                            <li>• Admin authentication & role-based access</li>
+                            <li>• 60% reduction in administrative overhead</li>
+                        </ul>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-red-600 bg-opacity-20 rounded-full text-red-400 text-sm">PHP</span>
+                        <span class="px-3 py-1 bg-red-600 bg-opacity-20 rounded-full text-red-400 text-sm">MySQL</span>
+                        <span class="px-3 py-1 bg-red-600 bg-opacity-20 rounded-full text-red-400 text-sm">Tailwind
+                            CSS</span>
+                        <span
+                            class="px-3 py-1 bg-red-600 bg-opacity-20 rounded-full text-red-400 text-sm">JavaScript</span>
+                    </div>
+                </div>
+
+                <div class="glass-effect rounded-2xl p-6 card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="mb-6">
+                        <i class="fas fa-boxes text-4xl text-red-500 mb-4"></i>
+                        <h3 class="text-2xl font-bold text-red-400 mb-2">Inventory Management System</h3>
+                        <p class="text-gray-400 mb-4">January 2025 – March 2025</p>
+                    </div>
+                    <p class="text-gray-300 mb-6">
+                        A command-line Java application to manage inventory records for small businesses. Designed
+                        following Object-Oriented Programming principles with full CRUD operations.
+                    </p>
+                    <div class="mb-6">
+                        <h4 class="text-lg font-semibold text-red-400 mb-3">Key Features:</h4>
+                        <ul class="space-y-2 text-gray-300">
+                            <li>• Full CRUD operations on products and suppliers</li>
+                            <li>• Stock management logic</li>
+                            <li>• MySQL database integration using JDBC</li>
+                            <li>• Object-Oriented Programming principles</li>
+                        </ul>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-red-600 bg-opacity-20 rounded-full text-red-400 text-sm">Java</span>
+                        <span class="px-3 py-1 bg-red-600 bg-opacity-20 rounded-full text-red-400 text-sm">MySQL</span>
+                        <span class="px-3 py-1 bg-red-600 bg-opacity-20 rounded-full text-red-400 text-sm">JDBC</span>
+                        <span class="px-3 py-1 bg-red-600 bg-opacity-20 rounded-full text-red-400 text-sm">OOP</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education" class="py-20">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl md:text-5xl font-bold text-center text-gradient mb-16" data-aos="fade-up">Education</h2>
+            <div class="max-w-4xl mx-auto space-y-8">
+                <div class="glass-effect rounded-2xl p-6 card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="flex items-start space-x-4">
+                        <i class="fas fa-graduation-cap text-3xl text-red-500 mt-2"></i>
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold text-red-400">Bachelor of Engineering in Computer Science and
+                                Engineering</h3>
+                            <p class="text-gray-300 mt-1">Sanjay Memorial Institute of Technology – Berhampur, Odisha
+                            </p>
+                            <p class="text-gray-400 mt-2">2020 – 2024</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-effect rounded-2xl p-6 card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="flex items-start space-x-4">
+                        <i class="fas fa-certificate text-3xl text-red-500 mt-2"></i>
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold text-red-400">Java Developer Certification</h3>
+                            <p class="text-gray-300 mt-1">ACEIT</p>
+                            <p class="text-gray-400 mt-2">July 2023 – September 2024</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl md:text-5xl font-bold text-center text-gradient mb-16" data-aos="fade-up">Get In Touch
+            </h2>
+            <div class="max-w-4xl mx-auto">
+                <div class="grid md:grid-cols-2 gap-12">
+                    <div class="glass-effect rounded-2xl p-8 card" data-aos="fade-right">
+                        <h3 class="text-2xl font-bold text-red-400 mb-6">Let's Connect</h3>
+                        <p class="text-gray-300 mb-8">
+                            I'm always interested in discussing new opportunities, collaborating on projects, or just
+                            having a chat about technology and development.
+                        </p>
+                        <div class="space-y-6">
+                            <div class="flex items-center space-x-4">
+                                <div
+                                    class="w-12 h-12 bg-red-600 bg-opacity-20 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-phone text-red-500"></i>
+                                </div>
+                                <div>
+                                    <p class="text-gray-400">Phone</p>
+                                    <p class="text-white">+91-9777767188</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <div
+                                    class="w-12 h-12 bg-red-600 bg-opacity-20 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-envelope text-red-500"></i>
+                                </div>
+                                <div>
+                                    <p class="text-gray-400">Email</p>
+                                    <p class="text-white">chandanpanda726@gmail.com</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <div
+                                    class="w-12 h-12 bg-red-600 bg-opacity-20 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-map-marker-alt text-red-500"></i>
+                                </div>
+                                <div>
+                                    <p class="text-gray-400">Location</p>
+                                    <p class="text-white">Berhampur, Odisha</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-8 flex space-x-4">
+                            <a href="https://linkedin.com/in/chandancharchita"
+                                class="w-12 h-12 bg-red-600 bg-opacity-20 rounded-full flex items-center justify-center hover:bg-red-600 hover:bg-opacity-40 transition-all duration-300">
+                                <i class="fab fa-linkedin text-red-500"></i>
+                            </a>
+                            <a href="https://github.com/HLCodeverse"
+                                class="w-12 h-12 bg-red-600 bg-opacity-20 rounded-full flex items-center justify-center hover:bg-red-600 hover:bg-opacity-40 transition-all duration-300">
+                                <i class="fab fa-github text-red-500"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="glass-effect rounded-2xl p-8 card contact-form" data-aos="fade-left">
+                        <h3 class="text-2xl font-bold text-red-400 mb-6">Send Message</h3>
+                        <form class="space-y-6" action="mailto:chandanpanda726@gmail.com" method="post"
+                            enctype="text/plain">
+                            <div>
+                                <input type="text" name="name" placeholder="Your Name"
+                                    class="w-full px-4 py-3 rounded-lg" required>
+                            </div>
+                            <div>
+                                <input type="email" name="email" placeholder="Your Email"
+                                    class="w-full px-4 py-3 rounded-lg" required>
+                            </div>
+                            <div>
+                                <input type="text" name="subject" placeholder="Subject"
+                                    class="w-full px-4 py-3 rounded-lg" required>
+                            </div>
+                            <div>
+                                <textarea name="message" placeholder="Your Message" rows="5"
+                                    class="w-full px-4 py-3 rounded-lg" required></textarea>
+                            </div>
+                            <button type="submit"
+                                class="w-full red-gradient text-white py-3 rounded-lg font-semibold hover:shadow-lg hover:shadow-red-500/25 transition-all duration-300 transform hover:scale-105">
+                                Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-gray-800">
+        <div class="container mx-auto px-6 text-center">
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold text-gradient mb-4">Chandan Charchita Panda</h3>
+                <p class="text-gray-400">Java Developer & Full-Stack Engineer</p>
+            </div>
+            <div class="flex justify-center space-x-6 mb-8">
+                <a href="https://linkedin.com/in/chandancharchita"
+                    class="text-gray-400 hover:text-red-500 transition-colors duration-300">
+                    <i class="fab fa-linkedin text-2xl"></i>
+                </a>
+                <a href="https://github.com/HLCodeverse"
+                    class="text-gray-400 hover:text-red-500 transition-colors duration-300">
+                    <i class="fab fa-github text-2xl"></i>
+                </a>
+                <a href="mailto:chandanpanda726@gmail.com"
+                    class="text-gray-400 hover:text-red-500 transition-colors duration-300">
+                    <i class="fas fa-envelope text-2xl"></i>
+                </a>
+                <a href="tel:+919777767188" class="text-gray-400 hover:text-red-500 transition-colors duration-300">
+                    <i class="fas fa-phone text-2xl"></i>
+                </a>
+            </div>
+            <p class="text-gray-400">&copy; 2025 Chandan Charchita Panda. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Scroll Progress Bar
+        window.addEventListener('scroll', () => {
+            const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            document.getElementById('scrollProgress').style.width = scrolled + '%';
+        });
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when clicking on links
+        mobileMenu.addEventListener('click', (e) => {
+            if (e.target.tagName === 'A') {
+                mobileMenu.classList.add('hidden');
             }
-            
-            // Remove active class from all tab buttons
-            const tabButtons = document.getElementsByClassName('tab-button');
-            for (let i = 0; i < tabButtons.length; i++) {
-                tabButtons[i].classList.remove('active');
-            }
-            
-            // Show the current tab and add active class to button
-            document.getElementById(tabName).classList.remove('hidden');
-            event.currentTarget.classList.add('active');
-        }
-        
-        // Initialize blur load for images
-        document.addEventListener('DOMContentLoaded', function() {
-            const blurLoads = document.querySelectorAll('.blur-load');
-            blurLoads.forEach(div => {
-                const img = div.querySelector('img');
-                if (img.complete) {
-                    div.classList.add('loaded');
-                } else {
-                    img.addEventListener('load', function() {
-                        div.classList.add('loaded');
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
                     });
                 }
             });
-            
-            // Set first tab as active by default
-            openTab('details');
+        });
+
+        // Skill bar animations
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const skillsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const skillBars = entry.target.querySelectorAll('.skill-progress');
+                    skillBars.forEach(bar => {
+                        const width = bar.getAttribute('data-width');
+                        bar.style.transform = `scaleX(${parseInt(width) / 100})`;
+                    });
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('#skills .card').forEach(card => {
+            skillsObserver.observe(card);
+        });
+
+        // Typing effect for hero section
+        const heroText = document.querySelector('#home h1');
+        const originalText = heroText.textContent;
+        heroText.textContent = '';
+
+        function typeWriter(text, element, speed = 100) {
+            let i = 0;
+            function type() {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+
+        // Start typing effect after page load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                typeWriter(originalText, heroText, 100);
+            }, 500);
         });
     </script>
 </body>
+
 </html>
